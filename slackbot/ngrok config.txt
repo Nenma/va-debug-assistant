@@ -1,0 +1,2 @@
+ngrok config add-authtoken 28cc4Tdc6NYjSGSNrngSSdG3cuK_6KfuiMWi3obNmNySp4b9o
+ngrok http 3000
