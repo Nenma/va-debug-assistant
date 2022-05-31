@@ -1,6 +1,7 @@
 from turtle import title
 import aiml
-import wikipedia
+from argon2 import extract_parameters
+import wikipediaapi
 import os
 from search import search_answers
 from flask import Flask, jsonify, request, render_template
@@ -45,7 +46,16 @@ def send():
         })
     elif message.startswith('tell me more about'):
         theme = kernel.getPredicate('factual', SESSION_ID)
-        return jsonify({'answer': f'Testing, testing! Looking for stuff on {theme}...'})
+        wiki = wikipediaapi.Wikipedia(
+            language='en', extract_format=wikipediaapi.ExtractFormat.WIKI)
+        page = wiki.page(theme)
+        if (page.exists()):
+            return jsonify({
+                'answer': f'Here is what I found: {page.summary}',
+                'question_link': page.fullurl
+            })
+        else:
+            return jsonify({'answer': 'Sorry, I could not find info about that...'})
     else:
         print('Debug Assistant>', bot_response)
         return jsonify({'answer': bot_response})
