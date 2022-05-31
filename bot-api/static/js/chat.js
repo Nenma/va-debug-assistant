@@ -49,8 +49,14 @@ document.querySelector('.send').addEventListener('click', async (event) => {
         redirect: 'follow'
     });
     res = await res.json();
-    console.log(res);
-    addChatBubble(res.answer, 'DA', 'message-rec')
+
+    if (res.original_question) {
+        addChatBubble(`This was the original question: ${res.original_question}`, 'DA', 'message-received');
+    }
+    addChatBubble(res.answer, 'DA', 'message-received');
+    if (res.question_link) {
+        addChatBubble(`You can find more here ${res.question_link}`, 'DA', 'message-received');
+    }
     
     message.value = '';
 });
